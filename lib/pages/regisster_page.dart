@@ -1,23 +1,22 @@
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/helper/show_snack_bar.dart';
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/pages/regisster_page.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_form_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+class RegissterPage extends StatefulWidget {
+  RegissterPage({super.key});
 
-  static String id = 'LoginPage';
+  static String id = 'RegissterPage';
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegissterPage> createState() => _RegissterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegissterPageState extends State<RegissterPage> {
   String? email;
 
   String? password;
@@ -64,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Row(
                   children: [
                     Text(
-                      'LOGIN',
+                      'Register',
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.black,
@@ -100,15 +99,15 @@ class _LoginPageState extends State<LoginPage> {
                         isLoading = true;
                       });
                       try {
-                        await loginUser();
+                        await createUser();
                         Navigator.pushNamed(context, ChatPage.id);
                       } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          showSnakkBar(
-                              context, 'User Not Found Try To Register');
-                        } else if (e.code == 'wrong-password') {
+                        if (e.code == 'weak-password') {
                           showSnakkBar(context,
-                              'Wrong Password Try To Remember Your Password');
+                              'Weak Password Make It Stronger Like You');
+                        } else if (e.code == 'email-already-in-use') {
+                          showSnakkBar(context,
+                              'The Account Already Exists Try To Login');
                         }
                       } catch (e) {
                         showSnakkBar(context, e.toString());
@@ -118,21 +117,21 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     }
                   },
-                  text: 'Login',
+                  text: 'Register',
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Don\'t Have Account',
+                      'Already Have Account',
                       style: TextStyle(color: Colors.black),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RegissterPage.id);
+                        Navigator.pop(context);
                       },
                       child: const Text(
-                        '  Register',
+                        '  Login',
                         style: TextStyle(color: Colors.blue),
                       ),
                     ),
@@ -146,8 +145,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> loginUser() async {
+  Future<void> createUser() async {
     UserCredential user = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: password!);
+        .createUserWithEmailAndPassword(email: email!, password: password!);
   }
 }
