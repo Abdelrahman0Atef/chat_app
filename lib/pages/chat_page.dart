@@ -13,6 +13,8 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String email = ModalRoute.of(context)!.settings.arguments as String;
+
     return StreamBuilder<QuerySnapshot>(
         stream: messages.orderBy(kCreatedAt, descending: true).snapshots(),
         builder: (context, snapshot) {
@@ -45,9 +47,11 @@ class ChatPage extends StatelessWidget {
                       controller: _controller,
                       itemCount: messageslist.length,
                       itemBuilder: (context, index) {
-                        return ChatBubble(
-                          message: messageslist[index],
-                        );
+                        return messageslist[index].id == email
+                            ? SChatBubble(
+                                message: messageslist[index],
+                              )
+                            : ChatBubble(message: messageslist[index]);
                       },
                     ),
                   ),
@@ -56,8 +60,11 @@ class ChatPage extends StatelessWidget {
                     child: TextField(
                       controller: controller,
                       onSubmitted: (data) {
-                        messages
-                            .add({kMessage: data, kCreatedAt: DateTime.now()});
+                        messages.add({
+                          kMessage: data,
+                          kCreatedAt: DateTime.now(),
+                          kId: email
+                        });
                         controller.clear();
                         _controller.animateTo(0,
                             duration: const Duration(milliseconds: 500),
@@ -94,7 +101,7 @@ class ChatPage extends StatelessWidget {
               ),
             );
           } else {
-            return Text('No Data Please Wait...');
+            return Scaffold(body: Text('No Data Please Wait...'));
           }
         });
   }

@@ -6,3 +6,4 @@ const klogo = 'assets/images/message.png';
 const String kMessagesCollections = 'messages';
 const String kMessage = 'message';
 const String kCreatedAt = 'createdAt';
+const String kId = 'id';

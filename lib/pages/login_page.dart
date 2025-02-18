@@ -1,7 +1,7 @@
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/helper/show_snack_bar.dart';
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/pages/regisster_page.dart';
+import 'package:chat_app/pages/register_page.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_form_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -85,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 10,
                 ),
                 CustomFormTextField(
+                  obscureText: true,
                   onChanged: (data) {
                     password = data;
                   },
@@ -101,7 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                       });
                       try {
                         await loginUser();
-                        Navigator.pushNamed(context, ChatPage.id);
+                        Navigator.pushNamed(context, ChatPage.id,
+                            arguments: email);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
                           showSnakkBar(
@@ -120,6 +122,9 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   text: 'Login',
                 ),
+                const SizedBox(
+                  height: 5,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -129,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RegissterPage.id);
+                        Navigator.pushNamed(context, RegisterPage.id);
                       },
                       child: const Text(
                         '  Register',

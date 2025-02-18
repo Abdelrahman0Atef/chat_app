@@ -7,16 +7,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class RegissterPage extends StatefulWidget {
-  RegissterPage({super.key});
+class RegisterPage extends StatefulWidget {
+  RegisterPage({super.key});
 
-  static String id = 'RegissterPage';
+  static String id = 'RegisterPage';
 
   @override
-  State<RegissterPage> createState() => _RegissterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegissterPageState extends State<RegissterPage> {
+class _RegisterPageState extends State<RegisterPage> {
   String? email;
 
   String? password;
@@ -87,6 +87,7 @@ class _RegissterPageState extends State<RegissterPage> {
                   onChanged: (data) {
                     password = data;
                   },
+                  obscureText: true,
                   hintText: 'Password',
                 ),
                 const SizedBox(
@@ -118,6 +119,9 @@ class _RegissterPageState extends State<RegissterPage> {
                     }
                   },
                   text: 'Register',
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
